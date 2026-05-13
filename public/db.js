@@ -107,4 +107,5 @@
 
   // Expose as global `db` object — required by the spec
   global.db = { openCostsDB: openCostsDB };
-})(typeof window !== 'undefined' ? window : global);
+  //global === globalThis
+})(typeof window !== 'undefined' ? window : globalThis);
