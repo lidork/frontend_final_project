@@ -6,9 +6,8 @@ import MonthlyReport from './components/MonthlyReport';
 import PieChart from './components/PieChart';
 import BarChart from './components/BarChart';
 import Settings from './components/Settings';
-import AdminPanel from './components/AdminPanel';
 
-const TABS = ['Add Cost', 'Monthly Report', 'Pie Chart', 'Bar Chart', 'Settings', 'Admin'];
+const TABS = ['Add Cost', 'Monthly Report', 'Pie Chart', 'Bar Chart', 'Settings'];
 
 function App() {
   const [tab, setTab] = useState(0);
@@ -58,7 +57,6 @@ function App() {
           {tab === 2 && <PieChart customRatesUrl={customRatesUrl} />}
           {tab === 3 && <BarChart customRatesUrl={customRatesUrl} />}
           {tab === 4 && <Settings customRatesUrl={customRatesUrl} onSave={setCustomRatesUrl} />}
-          {tab === 5 && <AdminPanel customRatesUrl={customRatesUrl} />}
         </div>
       </div>
     </div>
