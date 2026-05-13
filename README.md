@@ -7,7 +7,8 @@ A front-end expense tracking application built with React and MUI.
 | Name | Role |
 |---|---|
 | Lidor Kalfon | Team Manager |
-| PLACEHOLDER | Member |
+| Dana Mund | Member |
+| Shaked Avdar| Member | 
 
 ## Goal
 
