@@ -1,0 +1,84 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --font-body: 'Figtree', system-ui, sans-serif;
+  --font-heading: 'Epilogue', system-ui, sans-serif;
+
+  /* Palette — warm-tinted neutrals, OKLCH */
+  --bg:          oklch(98% 0.005 60);
+  --surface:     oklch(100% 0 0);
+  --border:      oklch(88% 0.008 60);
+  --text:        oklch(32% 0.01 60);
+  --text-muted:  oklch(55% 0.01 60);
+  --accent:      oklch(48% 0.17 255);
+  --accent-hover:oklch(42% 0.17 255);
+  --accent-text: oklch(99% 0 0);
+  --success-bg:  oklch(96% 0.03 145);
+  --success-text:oklch(35% 0.1 145);
+  --error-bg:    oklch(96% 0.03 20);
+  --error-text:  oklch(38% 0.12 20);
+
+  /* Spacing scale (4pt base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+p { margin: 0; }
+
+/* MUI overrides — keep MUI functional but use our tokens */
+.MuiOutlinedInput-root {
+  background: var(--surface);
+}
+
+.MuiTableCell-head {
+  font-family: var(--font-heading) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: var(--text-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg) !important;
+}
+
+.MuiTableCell-body {
+  font-family: var(--font-body) !important;
+  font-size: 14px !important;
+  color: var(--text) !important;
+}
+
+.MuiAlert-root {
+  font-family: var(--font-body) !important;
+  font-size: 14px !important;
+}

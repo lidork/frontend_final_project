@@ -1,0 +1,251 @@
+/* Shared component styles */
+
+/* ── Section heading ── */
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: var(--space-5);
+}
+
+/* ── Form layout ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  max-width: 560px;
+}
+
+.form-grid .form-field-full {
+  grid-column: 1 / -1;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.form-input,
+.form-select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--accent);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent-text);
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  padding: 9px var(--space-5);
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+  margin-top: var(--space-2);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+/* Success flash — applied briefly after a cost item is saved */
+.btn-primary.btn-saved {
+  background: var(--success-text);
+  pointer-events: none;
+}
+
+/* Row that holds the submit button and the optional date toggle — no margin-top
+   override needed here; btn-primary's own margin-top is cleared inside this row */
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.form-actions .btn-primary {
+  margin-top: 0;
+}
+
+/* Subtle ghost button for the date picker toggle — matches btn-primary height */
+.btn-date-toggle {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px var(--space-3);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-date-toggle:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+/* Date field slide-in animation when revealed */
+@keyframes date-reveal {
+  from { opacity: 0; transform: translateY(-6px); max-height: 0; }
+  to   { opacity: 1; transform: translateY(0);    max-height: 80px; }
+}
+
+@keyframes date-hide {
+  from { opacity: 1; transform: translateY(0);    max-height: 80px; }
+  to   { opacity: 0; transform: translateY(-6px); max-height: 0; }
+}
+
+.date-field-animated {
+  animation: date-reveal 0.2s ease-out both;
+  overflow: hidden;
+}
+
+.date-field-closing {
+  animation: date-hide 0.2s ease-in both;
+  overflow: hidden;
+}
+
+/* ── Controls row (selectors + button) ── */
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+/* Generate/action button inside a controls-row must align to the bottom of the
+   row (matching the select inputs), not the top as btn-primary's align-self would do. */
+.controls-row .btn-primary {
+  align-self: flex-end;
+  margin-top: 0;
+}
+
+.control-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.control-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.control-select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 28px 7px 10px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  transition: border-color 0.15s;
+  min-width: 110px;
+}
+
+.control-select:focus {
+  border-color: var(--accent);
+}
+
+/* ── Inline feedback ── */
+.feedback {
+  font-size: 13px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: 6px;
+  margin-bottom: var(--space-4);
+}
+
+.feedback.error {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.feedback.success {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.feedback.info {
+  background: oklch(96% 0.01 255);
+  color: oklch(38% 0.1 255);
+}
+
+/* ── Report table ── */
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: var(--space-4);
+}
+
+.report-table th {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.report-table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.report-table tr:last-child td {
+  border-bottom: none;
+  font-weight: 600;
+  background: var(--bg);
+}
+
+/* ── Empty state ── */
+.empty-state {
+  padding: var(--space-7) 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
