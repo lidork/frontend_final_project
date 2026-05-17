@@ -55,10 +55,10 @@ function openCostsDB(databaseName, databaseVersion) {
     const targetMonth = month ?? now.getMonth() + 1;
 
     const allItems = readAll();
-    const filtered = allItems.filter(
-      (item) =>
-        item.date.year === targetYear && item.date.month === targetMonth
-    );
+    // Attach the global array index so callers can delete specific items by position.
+    const filtered = allItems
+      .map((item, i) => ({ ...item, _index: i }))
+      .filter((item) => item.date.year === targetYear && item.date.month === targetMonth);
 
     // Convert each item's sum to the target currency using provided rates.
     // If no rates are provided, totals are calculated without conversion (assumes 1:1).
@@ -92,7 +92,15 @@ function openCostsDB(databaseName, databaseVersion) {
     };
   }
 
-  return { addCost, getReport };
+  // Removes the cost item at the given global index in the stored array.
+  // index - the position returned alongside each item by getReport.
+  function removeCostAtIndex(index) {
+    const items = readAll();
+    items.splice(index, 1);
+    writeAll(items);
+  }
+
+  return { addCost, getReport, removeCostAtIndex };
 }
 
 export { openCostsDB };

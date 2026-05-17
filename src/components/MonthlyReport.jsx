@@ -28,6 +28,19 @@ function MonthlyReport({ customRatesUrl }) {
     }
   }
 
+  async function handleDelete(globalIndex) {
+    try {
+      db.removeCostAtIndex(globalIndex);
+      // Refresh the report in place so the deleted row disappears immediately.
+      const rates = await fetchRates(customRatesUrl || undefined);
+      const result = await db.getReport(currency, year, month, rates);
+      setReport(result);
+      toast.success('Item deleted.');
+    } catch {
+      toast.error('Failed to delete item.');
+    }
+  }
+
   return (
     <div>
       <h2 className="section-title">Monthly Report</h2>
@@ -69,6 +82,7 @@ function MonthlyReport({ customRatesUrl }) {
               <th>Description</th>
               {/* "Original" column shows the amount in the currency it was entered, not converted */}
               <th>Original</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -78,11 +92,14 @@ function MonthlyReport({ customRatesUrl }) {
                 <td>{item.category}</td>
                 <td>{item.description}</td>
                 <td>{item.sum} {item.currency}</td>
+                <td>
+                  <button className="btn-delete" onClick={() => handleDelete(item._index)}>✕</button>
+                </td>
               </tr>
             ))}
-            {/* Total row spans description columns; converted sum uses the selected currency */}
+            {/* Total row spans all data columns; converted sum uses the selected currency */}
             <tr>
-              <td colSpan={3}>Total</td>
+              <td colSpan={4}>Total</td>
               <td>{report.total.sum} {report.total.currency}</td>
             </tr>
           </tbody>
