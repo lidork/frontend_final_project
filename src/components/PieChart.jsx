@@ -20,7 +20,7 @@ function PieChart({ customRatesUrl }) {
     setData(null);
     try {
       const rates = await fetchRates(customRatesUrl || undefined);
-      const report = await db.getReport(currency, year, month, rates);
+      const report = db.getReport(currency, year, month, rates);
 
       // Aggregate converted sums per category for the chart slices.
       // Re-applies the two-step USD normalization here (rather than relying on

@@ -15,10 +15,8 @@ function MonthlyReport({ customRatesUrl }) {
   async function handleGenerate() {
     setReport(null);
     try {
-      // Fetch rates first; customRatesUrl comes from Settings (may be empty string → use default).
       const rates = await fetchRates(customRatesUrl || undefined);
-      const result = await db.getReport(currency, year, month, rates);
-      setReport(result);
+      setReport(db.getReport(currency, year, month, rates));
     } catch {
       toast.error('Failed to fetch exchange rates. Check your connection or settings.');
     }

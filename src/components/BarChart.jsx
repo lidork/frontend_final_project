@@ -15,12 +15,7 @@ function BarChart({ customRatesUrl }) {
     setData(null);
     try {
       const rates = await fetchRates(customRatesUrl || undefined);
-      // Promise.all fires all 12 getReport calls simultaneously rather than
-      // sequentially — safe because each call reads localStorage independently
-      // and they share a single already-fetched rates object.
-      const reports = await Promise.all(
-        MONTH_LABELS.map((_, i) => db.getReport(currency, year, i + 1, rates))
-      );
+      const reports = MONTH_LABELS.map((_, i) => db.getReport(currency, year, i + 1, rates));
       setData(reports.map((r, i) => ({ month: MONTH_LABELS[i], total: r.total.sum })));
     } catch {
       toast.error('Failed to fetch exchange rates. Check your connection or settings.');

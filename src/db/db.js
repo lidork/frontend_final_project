@@ -1,4 +1,3 @@
-
 // Declaring db as a global instance.
 // Important as per project requirements.
 window.db = {};
@@ -47,53 +46,50 @@ window.db.openCostsDB = function (databaseName, databaseVersion) {
     return newItem;
   }
 
-  // Returns a Promise that resolves to a monthly report.
-  // Costs are returned in their original currency; conversion happens at the call site.
+  // Returns a monthly report object directly (synchronous — localStorage is sync).
   // currency - Target currency for the total (e.g. 'USD').
   // year - Defaults to current year. month - Defaults to current month (1-based).
   // rates - Exchange rates object e.g. {USD:1, GBP:0.6, EURO:0.7, ILS:3.4}.
   function getReport(currency, year, month, rates) {
-    return new Promise(function (resolve) {
-      const now = new Date();
-      const targetYear = year !== undefined ? year : now.getFullYear();
-      const targetMonth = month !== undefined ? month : now.getMonth() + 1;
+    const now = new Date();
+    const targetYear = year !== undefined ? year : now.getFullYear();
+    const targetMonth = month !== undefined ? month : now.getMonth() + 1;
 
-      const allItems = readAll();
-      const filtered = allItems.filter(
-        (item) => item.date.year === targetYear && item.date.month === targetMonth
-      );
+    const allItems = readAll();
+    const filtered = allItems.filter(
+      (item) => item.date.year === targetYear && item.date.month === targetMonth
+    );
 
-      // Convert each item's sum to the target currency using provided rates.
-      // If no rates are provided, totals are calculated without conversion (assumes 1:1).
-      let totalSum = 0;
-      if (rates) {
-        filtered.forEach((item) => {
-          // Two-step normalization: all rates are relative to 1 USD, so dividing by the
-          // item's currency rate gives the equivalent in USD, then multiplying by the
-          // target currency rate converts from USD to the requested currency.
-          // e.g. 120 GBP → 120/0.6 = 200 USD → 200*1 = 200 USD
-          // e.g. 120 GBP → 120/0.6 = 200 USD → 200*3.4 = 680 ILS
-          const inUSD = item.sum / (rates[item.currency] !== undefined ? rates[item.currency] : 1);
-          totalSum += inUSD * (rates[currency] !== undefined ? rates[currency] : 1);
-        });
-      } else {
-        filtered.forEach((item) => {
-          totalSum += item.sum;
-        });
-      }
-
-      resolve({
-        year: targetYear,
-        month: targetMonth,
-        costs: filtered,
-        total: {
-          currency: currency,
-          // Multiply by 100, round to integer, divide by 100 — avoids floating-point
-          // artifacts like 200.00000000000003 that arise from IEEE 754 arithmetic.
-          sum: Math.round(totalSum * 100) / 100,
-        },
+    // Convert each item's sum to the target currency using provided rates.
+    // If no rates are provided, totals are calculated without conversion (assumes 1:1).
+    let totalSum = 0;
+    if (rates) {
+      filtered.forEach((item) => {
+        // Two-step normalization: all rates are relative to 1 USD, so dividing by the
+        // item's currency rate gives the equivalent in USD, then multiplying by the
+        // target currency rate converts from USD to the requested currency.
+        // e.g. 120 GBP → 120/0.6 = 200 USD → 200*1 = 200 USD
+        // e.g. 120 GBP → 120/0.6 = 200 USD → 200*3.4 = 680 ILS
+        const inUSD = item.sum / (rates[item.currency] !== undefined ? rates[item.currency] : 1);
+        totalSum += inUSD * (rates[currency] !== undefined ? rates[currency] : 1);
       });
-    });
+    } else {
+      filtered.forEach((item) => {
+        totalSum += item.sum;
+      });
+    }
+
+    return {
+      year: targetYear,
+      month: targetMonth,
+      costs: filtered,
+      total: {
+        currency: currency,
+        // Multiply by 100, round to integer, divide by 100 — avoids floating-point
+        // artifacts like 200.00000000000003 that arise from IEEE 754 arithmetic.
+        sum: Math.round(totalSum * 100) / 100,
+      },
+    };
   }
 
   return { addCost, getReport };
@@ -102,4 +98,3 @@ window.db.openCostsDB = function (databaseName, databaseVersion) {
 
 // Shared instance used by all React components.
 export const db = window.db.openCostsDB('costsdb', 1);
-
