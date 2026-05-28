@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { openCostsDB } from '../db/db';
+import { db } from '../db/db';
 import { CURRENCIES } from '../utils/constants';
 import './components.css';
 
 const CATEGORIES = ['Food', 'Education', 'Health', 'Transport', 'Housing', 'Entertainment', 'Other'];
-
-// Module-scope singleton: openCostsDB only derives a localStorage key and holds
-// no connection, so one instance shared across all renders is safe and efficient.
-const db = openCostsDB('costsdb', 1);
 
 // Returns today's date as a YYYY-MM-DD string for the date input value and max.
 function todayString() {

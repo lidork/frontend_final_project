@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { BarChart as RechartsBar, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { openCostsDB } from '../db/db';
+import { db } from '../db/db';
 import { fetchRates } from '../utils/fetchRates';
 import { CURRENCIES, MONTH_LABELS, YEARS } from '../utils/constants';
 import './components.css';
-
-// Module-scope singleton: openCostsDB only derives a localStorage key and holds
-// no connection, so one instance shared across all renders is safe and efficient.
-const db = openCostsDB('costsdb', 1);
 
 function BarChart({ customRatesUrl }) {
   const [year, setYear] = useState(new Date().getFullYear());

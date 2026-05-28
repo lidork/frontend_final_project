@@ -1,13 +1,9 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { openCostsDB } from '../db/db';
+import { db } from '../db/db';
 import { fetchRates } from '../utils/fetchRates';
 import { CURRENCIES, MONTHS, YEARS } from '../utils/constants';
 import './components.css';
-
-// Module-scope singleton: openCostsDB only derives a localStorage key and holds
-// no connection, so one instance shared across all renders is safe and efficient.
-const db = openCostsDB('costsdb', 1);
 
 function MonthlyReport({ customRatesUrl }) {
   const now = new Date();
@@ -25,19 +21,6 @@ function MonthlyReport({ customRatesUrl }) {
       setReport(result);
     } catch {
       toast.error('Failed to fetch exchange rates. Check your connection or settings.');
-    }
-  }
-
-  async function handleDelete(globalIndex) {
-    try {
-      db.removeCostAtIndex(globalIndex);
-      // Refresh the report in place so the deleted row disappears immediately.
-      const rates = await fetchRates(customRatesUrl || undefined);
-      const result = await db.getReport(currency, year, month, rates);
-      setReport(result);
-      toast.success('Item deleted.');
-    } catch {
-      toast.error('Failed to delete item.');
     }
   }
 
@@ -82,7 +65,6 @@ function MonthlyReport({ customRatesUrl }) {
               <th>Description</th>
               {/* "Original" column shows the amount in the currency it was entered, not converted */}
               <th>Original</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -92,14 +74,11 @@ function MonthlyReport({ customRatesUrl }) {
                 <td>{item.category}</td>
                 <td>{item.description}</td>
                 <td>{item.sum} {item.currency}</td>
-                <td>
-                  <button className="btn-delete" onClick={() => handleDelete(item._index)}>✕</button>
-                </td>
               </tr>
             ))}
-            {/* Total row spans all data columns; converted sum uses the selected currency */}
+            {/* Total row spans description columns; converted sum uses the selected currency */}
             <tr>
-              <td colSpan={4}>Total</td>
+              <td colSpan={3}>Total</td>
               <td>{report.total.sum} {report.total.currency}</td>
             </tr>
           </tbody>

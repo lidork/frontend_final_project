@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { PieChart as RechartsPie, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { openCostsDB } from '../db/db';
+import { db } from '../db/db';
 import { fetchRates } from '../utils/fetchRates';
 import { CURRENCIES, MONTHS, YEARS } from '../utils/constants';
 import './components.css';
 
 // Seven distinct palette colors — cycles via modulo when there are more than 7 categories.
 const COLORS = ['#3b6fd4','#2fa87e','#d4803b','#a03bd4','#d43b5a','#3baed4','#8ea03b'];
-
-// Module-scope singleton: openCostsDB only derives a localStorage key and holds
-// no connection, so one instance shared across all renders is safe and efficient.
-const db = openCostsDB('costsdb', 1);
 
 function PieChart({ customRatesUrl }) {
   const now = new Date();
