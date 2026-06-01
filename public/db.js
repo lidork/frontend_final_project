@@ -17,10 +17,15 @@ window.db.openCostsDB = function (databaseName, databaseVersion) {
   const storageKey = DB_KEY_PREFIX + databaseName + '_v' + databaseVersion;
 
   // Reads all cost items from localStorage.
+  // Falls back to an empty array if the stored value is corrupted and cannot be parsed.
   function readAll() {
     const raw = localStorage.getItem(storageKey);
-    // Return an empty array when no data exists yet
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
   }
 
   // Writes the full items array back to localStorage.
@@ -63,9 +68,9 @@ window.db.openCostsDB = function (databaseName, databaseVersion) {
       const targetMonth = month !== undefined ? month : now.getMonth() + 1;
 
       const allItems = readAll();
-      // Keep only items that belong to the requested month and year
+      // Skip items with malformed date objects to prevent TypeError crashes.
       const filtered = allItems.filter(function (item) {
-        return item.date.year === targetYear && item.date.month === targetMonth;
+        return item.date && item.date.year === targetYear && item.date.month === targetMonth;
       });
 
       let totalSum = 0;

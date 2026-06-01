@@ -67,6 +67,11 @@ function AddCost() {
       toast.error('Sum cannot exceed 9,999,999.');
       return;
     }
+    // Use string-based check to avoid IEEE 754 false positives (e.g. 1.1 * 100 = 110.00000000000001).
+    if (/\.\d{3,}/.test(form.sum)) {
+      toast.error('Sum cannot have more than 2 decimal places.');
+      return;
+    }
     if (!form.description.trim()) {
       toast.error('Description is required.');
       return;
@@ -106,7 +111,8 @@ function AddCost() {
             name="sum"
             type="number"
             min="0"
-            step="any"
+            max="9999999"
+            step="0.01"
             placeholder="0.00"
             value={form.sum}
             onChange={handleChange}
@@ -135,6 +141,7 @@ function AddCost() {
             className="form-input"
             name="description"
             type="text"
+            maxLength={200}
             placeholder="e.g. Groceries"
             value={form.description}
             onChange={handleChange}

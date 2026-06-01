@@ -69,6 +69,7 @@ function Settings({ customRatesUrl, onSave }) {
         <p style={{ fontSize: 13, color: 'var(--text-muted)', wordBreak: 'break-all' }}>
           {customRatesUrl || '/rates.json (default)'}
         </p>
+        {/* Settings are stored in memory — refreshing the page resets to default. Use the Reset button above to clear the URL without refreshing. */}
       </div>
     </div>
   );
