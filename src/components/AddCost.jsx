@@ -63,8 +63,16 @@ function AddCost() {
       toast.error('Sum must be a positive number.');
       return;
     }
+    if (sum > 9999999) {
+      toast.error('Sum cannot exceed 9,999,999.');
+      return;
+    }
     if (!form.description.trim()) {
       toast.error('Description is required.');
+      return;
+    }
+    if (form.description.trim().length > 200) {
+      toast.error('Description cannot exceed 200 characters.');
       return;
     }
     // Parse the chosen date into day/month/year for the db item shape.

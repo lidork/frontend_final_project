@@ -33,8 +33,8 @@ function PieChart({ customRatesUrl }) {
       });
 
       setData(Object.entries(totals).map(([name, value]) => ({ name, value: Math.round(value * 100) / 100 })));
-    } catch {
-      toast.error('Failed to fetch exchange rates. Check your connection or settings.');
+    } catch (e) {
+      toast.error(e.message || 'Failed to fetch exchange rates. Check your connection or settings.');
     }
   }
 

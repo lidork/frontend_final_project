@@ -17,8 +17,8 @@ function MonthlyReport({ customRatesUrl }) {
     try {
       const rates = await fetchRates(customRatesUrl || undefined);
       setReport(db.getReport(currency, year, month, rates));
-    } catch {
-      toast.error('Failed to fetch exchange rates. Check your connection or settings.');
+    } catch (e) {
+      toast.error(e.message || 'Failed to fetch exchange rates. Check your connection or settings.');
     }
   }
 

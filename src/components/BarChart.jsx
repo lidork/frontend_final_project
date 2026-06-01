@@ -17,8 +17,8 @@ function BarChart({ customRatesUrl }) {
       const rates = await fetchRates(customRatesUrl || undefined);
       const reports = MONTH_LABELS.map((_, i) => db.getReport(currency, year, i + 1, rates));
       setData(reports.map((r, i) => ({ month: MONTH_LABELS[i], total: r.total.sum })));
-    } catch {
-      toast.error('Failed to fetch exchange rates. Check your connection or settings.');
+    } catch (e) {
+      toast.error(e.message || 'Failed to fetch exchange rates. Check your connection or settings.');
     }
   }
 
