@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { fetchRates } from '../utils/fetchRates';
 import './components.css';
 
 function Settings({ customRatesUrl, onSave }) {
   const [url, setUrl] = useState(customRatesUrl);
-  function handleSave(e) {
+  const [testing, setTesting] = useState(false);
+
+  async function handleSave(e) {
     e.preventDefault();
     const trimmed = url.trim();
 
@@ -12,6 +15,20 @@ function Settings({ customRatesUrl, onSave }) {
     if (trimmed && !/^https?:\/\/.+/.test(trimmed)) {
       toast.error('URL must start with http:// or https://');
       return;
+    }
+
+    // Test the URL by actually fetching it before saving — saves the user from
+    // discovering a broken URL later when generating a report or chart.
+    if (trimmed) {
+      setTesting(true);
+      try {
+        await fetchRates(trimmed);
+      } catch (err) {
+        setTesting(false);
+        toast.error(`Invalid rates URL: ${err.message}`);
+        return;
+      }
+      setTesting(false);
     }
 
     onSave(trimmed);
@@ -48,7 +65,9 @@ function Settings({ customRatesUrl, onSave }) {
         </div>
 
         <div style={{ display: 'flex', gap: 'var(--space-3)' }}>
-          <button type="submit" className="btn-primary" style={{ marginTop: 0 }}>Save</button>
+          <button type="submit" className="btn-primary" style={{ marginTop: 0 }} disabled={testing}>
+            {testing ? 'Testing URL…' : 'Save'}
+          </button>
           {/* Reset button only appears when there is a custom URL to clear */}
           {url && (
             <button
